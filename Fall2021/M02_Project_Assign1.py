@@ -24,15 +24,15 @@ print("There is 5 more days to turn an assignment in.\nIf I do it in 2 days, I h
 print("   ", prob_2) #Outputs problem 2 answer
 print(" ") #Adds a blank line
 
-print("If I have 3 hens that lay 2 eggs a day, how many eggs will I have in 4 days?")
+print("If I have 3 hens that lay 2 eggs a day, how many eggs will I have in 4 days?") #Problem 3 description
 print("   ", prob_3) #Outputs problem 3 answer
 print(" ") #Adds a blank line
 
-print ("I have completed 2 out of 25 assignments so far this semester...")
+print ("I have completed 2 out of 25 assignments so far this semester...") #Problem 4 description
 print("   ", prob_4) #Outputs problem 4 answer
 print(" ") #Adds a blank line
 
-print("I went to the store and first found 3 items I wanted to buy for $4 each.\nAdditionally, they had a .5 off coupon attached...")
+print("I went to the store and first found 3 items I wanted to buy for $4 each.\nAdditionally, they had a .5 off coupon attached...") #Problem 5 description
 print("   ", prob_5) #Outputs problem 5 answer
 print(" ") #Adds a blank line
 
