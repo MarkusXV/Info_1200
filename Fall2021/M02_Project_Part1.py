@@ -5,15 +5,15 @@ print("My name is Peter Sanford") #Prints my name
 print("I'm a student in Dr. Crandall's class: Fall 2021, Section 1") #My class information
 print(" ") #Adds a blank line
 
-prob_1 = 5 + 4
+prob_1 = 5 + 4 #solution to problem 1
 
-prob_2 = 5 - 2
+prob_2 = 5 - 2 #solution to problem 2
 
-prob_3 = (3 * 2) * 4
+prob_3 = (3 * 2) * 4 #solution to problem 3
 
-prob_4 = 2 / 25
+prob_4 = 2 / 25 #solution to problem 4
 
-prob_5 = (3 * 4) / 2
+prob_5 = (3 * 4) / 2 #solution to problem 5
 
 print("Fun Math Problems:") #title for the body
 print("Rolling a 5 and a 4 on a pair of dice adds up to...") #Problem 1 description
