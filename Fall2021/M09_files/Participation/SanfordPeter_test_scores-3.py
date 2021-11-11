@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import math # imports the math function
-
 '''Displays a welcome message'''
 def display_welcome(): # defines function called display_welcome
     print("The Test Scores program") # prints the welcome message
@@ -10,43 +8,57 @@ def display_welcome(): # defines function called display_welcome
 
 '''Gets the user's input for the scores list'''
 def get_scores(): # defines function called get_scores
-    score_total = [] # sets an empty list so we can add to it later
+    scores = [] # sets an empty list so we can add to it later
     while True: # creates an infinite while loop for getting scores
         score = input("Enter test score: ")
         if score.lower() == "x":
-            return  score_total # if the user puts in x, it stops getting values
+            return  scores # if the user puts in x, it stops getting values
         else:
             score = int(score) # makes it an int instead of str so we can put it in the list
             if score >= 0 and score <= 100: # checks to see if the score is valid
-                score_total.append(score) # Adds the new score to the list
+                scores.append(score) # Adds the new score to the list
             else:
                 print("Test score must be from 0 through 100. " + "Score discarded. Try again.") # Displays an error message
 
 '''Processes the scores and gives statistical analysis'''
-def process_scores(score_total): # defines function called process_scores
-    score_total.sort() # sorts the values so the median is calculated correctly
-    average = sum(score_total) / len(score_total) # calculates the average
+def process_scores(scores): # defines function called process_scores
+    scores.sort() # sorts the values so the median is calculated correctly
     total = 0 # creates a variable total so we can use it later
-    for n in score_total: # runs for every number in the list
+    
+    for n in scores: # runs for every number in the list
         total += n # adds all of the numbers in the list together
-    total_index = len(score_total) # Sets variable equal to the total amount of numbers
-    if total_index % 2 != 0: # Sees if the total amount of numbers is divisible by two or not
-        median = score_total[int((total_index - 1) / 2)] # Calculates the median if the total number in the list is not even
-    else: # calculates the median if the total number in the list is even
-        first_median_num = score_total[int(total_index // 2 - 1)] # Finds the lower median number from the list
-        second_median_num = score_total[int(total_index // 2)] # Finds the upper median number from the list                          
+    average = total / len(scores) # calculates the average
+    
+    total_index = len(scores) - 1 # Sets variable equal to the index number total
+
+    # Calculates the minimum and maximum number
+    minimum = scores[0]
+    maximum = scores[total_index]
+
+    # Calculates the median number
+    if len(scores) % 2 != 0: # Sees if the total amount of numbers is divisible by two or not
+        # Calculates the median if the total number in the list is not even
+        median = scores[int((total_index) / 2)] 
+        
+    else:
+        # calculates the median if the total number in the list is even
+        first_median_num = scores[int(total_index // 2)] # Finds the lower median number from the list
+        second_median_num = scores[int(total_index // 2 + 1)] # Finds the upper median number from the list                          
         median =  (first_median_num + second_median_num) / 2 # averages the two above median numbers
-                   
-    print() # Adds a blank line
-    print("Score total:       ", total) # Prints the score total
-    print("Number of Scores:  ", len(score_total)) # Prints the total count of numbers
-    print("Average Score:     ", average) # Prints the average
-    print("Median:            ", median) # Prints the median
+
+    # Format and display the results        
+    print()
+    print("Score total:       ", total) 
+    print("Number of Scores:  ", len(scores)) 
+    print("Average Score:     ", average) 
+    print("Minimum Number:    ", minimum) 
+    print("Maximum Number:    ", maximum) 
+    print("Median:            ", median) 
 
 def main(): # defines the main function
     display_welcome() # calls the display welcome function
-    score_total = get_scores() # calles the get scores function and puts it into the score total variable
-    process_scores(score_total) # calles the process scores variable and passes the score total variable list in
+    scores = get_scores() # calles the get scores function and puts it into the score total variable
+    process_scores(scores) # calles the process scores variable and passes the score total variable list in
     print() # prints blank line
     print("Bye!") # prints the salutation
 

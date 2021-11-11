@@ -131,7 +131,7 @@ class Wizard(ttk.Frame):
             self.message = "" # Resets the error message
 
         # Checks to see if there's an available spot in the inventory for them to add an item
-        if len(self.inventory) <= 4:
+        if len(self.inventory) < 4:
             self.inventory.append(item_name) # Adds the item they want to the next available item in the list
             self.list_update() # Updates the displayed list so it's correct
         else:
