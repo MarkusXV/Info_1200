@@ -91,20 +91,27 @@ class Wizard(ttk.Frame):
         ttk.Button(buttonFrame2, text = "Exit", command = self.parent.destroy).grid(column = 0, row = 0)
 
     
-    '''Updates the list after one of the changes have occurred'''
+    '''Updates the gui values according to the list so that the values displayed in the gui matches the items in the list'''
     def list_update(self):
+        # 1 item in inventory
         if len(self.inventory) >= 1:
             self.item1.set(self.inventory[0])
         else:
             self.item1.set("")
+            
+        # 2 items in inventory
         if len(self.inventory) >= 2:
             self.item2.set(self.inventory[1])
         else:
             self.item2.set("")
+            
+        # 3 items in inventory    
         if len(self.inventory) >= 3:
             self.item3.set(self.inventory[2])
         else:
             self.item3.set("")
+            
+        # 4 items in inventory
         if len(self.inventory) == 4:
             self.item4.set(self.inventory[3])
         else:
@@ -156,7 +163,10 @@ class Wizard(ttk.Frame):
             self.inventory[edit_number - 1] = edit_name # changes the item that's displayed using the number and name inputted in the gui
             self.list_update() # Updates the displayed list so it's correct
         else:
-            self.message += "Incorrect item number entered.\n" # Displays this message box if there's an error
+            if len(self.inventory) != 0:
+                self.message += "Incorrect item number entered.\n" # Displays this message box if there's an error
+            else:
+                self.message += "You don't have an item to edit.\n" # Displays this message box if there's an error
 
         # If the message isn't an empty string, it will display the error message
         if self.message != "": 
@@ -166,7 +176,6 @@ class Wizard(ttk.Frame):
         # Resets the fields where they input the value so that it's blank for another command
         self.edit_index.set("")
         self.edit_name.set("")
-
             
 
     def drop_item(self):
@@ -181,17 +190,25 @@ class Wizard(ttk.Frame):
             messagebox.showerror("Error:", self.message)
             self.message = "" # Resets the error message
 
-        name_of_item = self.inventory[drop_number - 1] # Gets the name of the item number that they want to drop
-        self.inventory.remove(name_of_item) # Drops the item with that name
+        # Checks to see if the number they put in is valid
+        if drop_number >= 1 and drop_number <= len(self.inventory):
+            name_of_item = self.inventory[drop_number - 1] # Gets the name of the item number that they want to drop
+            self.inventory.remove(name_of_item) # Drops the item with that name
+            self.list_update() # Updates the displayed list so it's correct
+        else:
+            if len(self.inventory) != 0:
+                self.message += "Incorrect item number entered.\n" # Displays this message box if there's an error
+            else:
+                self.message += "You don't have an item to drop.\n" # Displays this message box if there's an error
+                
+        # If the message isn't an empty string, it will display the error message
+        if self.message != "": 
+            messagebox.showerror("Error:", self.message)
+            self.message = "" # Resets the error message
 
-        self.list_update() # Updates the displayed list so it's correct
-
-        # Resets the fields where they input the value so that it's blank for another command
-        self.drop.set("")
+        self.drop.set("") # Resets the fields where they input the value so that it's blank for another command
 
             
-
-    
 
 if __name__ == "__main__": # If this is the main module, run this code
     root = tk.Tk() # Creates the root parent frame
