@@ -34,16 +34,17 @@ def process_scores(scores): # defines function called process_scores
     # Calculates the minimum and maximum number
     minimum = scores[0]
     maximum = scores[total_index]
+    median_index = total_index // 2
 
     # Calculates the median number
     if len(scores) % 2 != 0: # Sees if the total amount of numbers is divisible by two or not
         # Calculates the median if the total number in the list is not even
-        median = scores[int((total_index) / 2)] 
+        median = scores[int(median_index)] 
         
     else:
         # calculates the median if the total number in the list is even
-        first_median_num = scores[int(total_index // 2)] # Finds the lower median number from the list
-        second_median_num = scores[int(total_index // 2 + 1)] # Finds the upper median number from the list                          
+        first_median_num = scores[int(median_index)] # Finds the lower median number from the list
+        second_median_num = scores[int(median_index + 1)] # Finds the upper median number from the list                          
         median =  (first_median_num + second_median_num) / 2 # averages the two above median numbers
 
     # Format and display the results        
