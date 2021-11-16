@@ -64,6 +64,7 @@ def main():
         new_trip.append(gallons_used)
         new_trip.append(mpg)
         trips.append(new_trip)
+        
         write_trips(trips)
         list_trips()
 
