@@ -23,29 +23,27 @@ class Sales(ttk.Frame, tk.Text):
     '''Defines the init function to initalize the variables needed in the instances'''
     def __init__(self, parent):
         ttk.Frame.__init__(self, parent, padding = "30 8 30 20") # initalizes the initial frame for the gui
-        self.parent = parent # sets the parent to the self parent so that this function knows the parent
+        self.parent = parent # sets the parent to the self parent so that each instance knows the parent
         self.message = "" # sets the message to an empty string so that we can use it later
 
-        '''Sets up the variables that will store the gui entries'''
-        # Variables for adding a contact
+        self.contacts = self.read_contacts()
+
         self.contact_name_a = tk.StringVar()
         self.contact_email_a = tk.StringVar()
         self.contact_phone_a = tk.StringVar()
 
-        # Variable for viewing single contact
         self.contact_num_v = tk.StringVar()
+        self.contact_num_e = tk.StringVar()
 
-        # Variable for deleting a contact
         self.contact_num_d = tk.StringVar()
         
 
 
-        self.initComponents(root) # Runs the initComponents function to set up the grid
+        self.initComponents(root) # Each instance runs the initComponents function to set up the grid
 
     '''Display the grid of labels, buttons, and text entry fields'''
     def initComponents(self, parent):
-        self.parent = parent # sets the parent to the self parent so that this function knows the parent
-        
+        self.parent = parent
         # Creates the Frame for the text box
         textFrame = ttk.Frame(self)
         textFrame.grid(column = 0, row = 1, columnspan = 3, pady = 10)
@@ -64,8 +62,7 @@ class Sales(ttk.Frame, tk.Text):
 
         # Row 5
         ttk.Label(self, text = "Name: ").grid(column = 0, row = 4, padx = 5, sticky = tk.E)
-        self.name_box = ttk.Entry(self, width = 34, textvariable = self.contact_name_a)
-        self.name_box.grid(column = 1, row = 4, pady = 3, sticky = tk.W)
+        ttk.Entry(self, width = 34, textvariable = self.contact_name_a).grid(column = 1, row = 4, pady = 3, sticky = tk.W)
         ttk.Button(self, text = "Add Contact", command = self.add_contact).grid(column = 2, row = 4, rowspan = 4, sticky = tk.NW)
 
         # Row 6
@@ -98,126 +95,104 @@ class Sales(ttk.Frame, tk.Text):
 
         self.pack() # packs the frame so that it can be displayed in the gui
 
-        self.contacts = self.read_contacts() # calls the read_contacts function to get the values from the csv
-        self.view_all_contacts() # calls the view_all_contacts function so that they appear at the beginning of running the function
+        self.view_all_contacts()
 
-    '''Reads the csv file and puts it into the self.contacts list'''
+    
     def read_contacts(self):
-        lcontacts = [] # creates an empty list so that we can put the csv values into it
-        try: # try block with statements that can throw exceptions
-            with open("contacts.csv", newline="") as file: # Reads the csv file
-                reader = csv.reader(file)
-                for row in reader:
-                    lcontacts.append(row) # For every row, it will put it into the list, making it a two-dimensional list
-            return lcontacts
-        except FileNotFoundError: # If there's a File not found error:
-            self.message += f"Could not find contacts file. Starting new contacts file" # sets the error message
-            self.display_message() # Displays the error message
-            return lcontacts # returns the empty list so self.contacts becomes an empty list as well
+        lcontacts = []
+        with open("contacts.csv", newline="") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                lcontacts.append(row)
+        return lcontacts
 
-    '''Writes the self.contacts list to the csv file'''
     def write_contacts(self):
-        with open("contacts.csv", "w", newline = "") as file: # Opens the file and writes the list to it
-            # Creates the file if there isn't one to begin with
+        with open("contacts.csv", "w", newline = "") as file:
             writer = csv.writer(file)
             writer.writerows(self.contacts)
+        
 
-    '''Views all the contacts that are in the self.contacts list'''
     def view_all_contacts(self):
         # Resets the text box to empty
         self.contacts_output.delete("1.0", END)
 
-        counter = 1 # Creates the counter to print which contact it is
-        # Outputs the Header to the textbox
+        counter = 1
         self.contacts_output.insert(tk.END, "        Name\t\t  |       Email\t\t    |      Phone Number\n\n")
-        if len(self.contacts) > 0: # if there's something in the list to display:
-            for row in self.contacts:
-                # Prints each row in self.contacts in a good format
-                self.contacts_output.insert(tk.END, f" {counter} - {row[0]} | {row[1]} | {row[2]}\n"
-                    " ---------------------------------------------------------\n")
-                counter += 1
-
-    '''Views a single contact that the user chooses'''
-    def view_single_contact(self):
-        try: # try block that has statements that might throw exceptions
-            input_num = int(self.contact_num_v.get())
-        except ValueError: # if there's a value error:
-            self.message += f"Please Enter a Number" # sets the error message
-            self.display_message() # Displays the error message
-
-        if input_num > 0 and input_num <= len(self.contacts): # If the inputted number is valid:
-            # Resets the text box to empty
-            self.contacts_output.delete("1.0", END)
-            # Reprints the header to the text box
-            self.contacts_output.insert(tk.END, "        Name\t\t  |       Email\t\t    |      Phone Number\n\n")
-            # Sets the selected contact to the contact associated with the inputted number
-            selected_contact = self.contacts[input_num - 1]
-            # Outputs the selected contact to the text box
-            self.contacts_output.insert(tk.END, f" {input_num} - {selected_contact[0]} | {selected_contact[1]} | {selected_contact[2]}\n")
-            # Resets the entry box
-            self.contact_num_v.set("")
-        else: # If the inputted number is invalid:
-            self.message += f"Invalid Contact Number" # Sets the error message
-            self.contact_num_v.set("") # Resets the entry box
-            self.display_message() # Displays the error message
+        for row in self.contacts:
             
-    '''Adds a contact from name, email, and phone received from the user'''
-    def add_contact(self):
+            self.contacts_output.insert(tk.END, f" {counter} - {row[0]} | {row[1]} | {row[2]}\n"
+                                     " ---------------------------------------------------------\n")
+            counter += 1
+
+    def view_single_contact(self):
         # Resets the text box to empty
         self.contacts_output.delete("1.0", END)
 
-        try: # try block that has statements that might throw exceptions
+        try:
+            input_num = int(self.contact_num_v.get())
+        except ValueError:
+            self.message += f"Please Enter a Number"
+            self.display_message()
+
+        if input_num > 0 and input_num <= len(self.contacts):
+            self.contacts_output.insert(tk.END, "        Name\t\t  |       Email\t\t    |      Phone Number\n\n")
+            
+            selected_contact = self.contacts[input_num - 1]
+
+            self.contacts_output.insert(tk.END, f" {input_num} - {selected_contact[0]} | {selected_contact[1]} | {selected_contact[2]}\n")
+
+            self.contact_num_v.set("")
+
+    def add_contact(self):
+        self.contacts_output.delete("1.0", END)
+
+        try:
             inputted_name = str(self.contact_name_a.get())
             inputted_email = str(self.contact_email_a.get())
             inputted_phone = str(self.contact_phone_a.get())
-        except ValueError as e: # If there's a value error:
-            total_message = str(type(e)) + str(e) # Creates the error message from the error object
-            self.message += total_message # puts the error message to the self.message variable
-            self.display_message() # Displays the error message
+        except ValueError:
+            print("error")
 
 
-        lcontact = [] # creates a local list so we can add it to the global one
-        lcontact.append(inputted_name) # Puts the name in the local list
-        lcontact.append(inputted_email) # puts the email in the local list
-        lcontact.append(inputted_phone) # puts the phone in the local list
-        self.contacts.append(lcontact) # puts the local list into the global list to keep it a two-dimensional list
+        lcontact = []
+        lcontact.append(inputted_name)
+        lcontact.append(inputted_email)
+        lcontact.append(inputted_phone)
+        self.contacts.append(lcontact)
 
-        self.view_all_contacts() # calls the view_all_contacts variable to show the newly added contact
+        self.view_all_contacts()
 
-        self.write_contacts() # Rewrites the global list to the csv file, including the newly added contact
+        self.write_contacts()
 
-        # Resets the entry boxes
         self.contact_name_a.set("")
         self.contact_email_a.set("")
         self.contact_phone_a.set("")
 
-    '''Deletes a contact from the number the user inputs'''
     def delete_contact(self):
-        try: # try block that has statements that might throw exceptions
-            inputted_number = int(self.contact_num_d.get())
-        except ValueError: # if there's a value error:
-            self.message += f"Please enter a number" # creates the error message
-            self.display_message() # displays the error message
+        self.contacts_output.delete("1.0", END)
 
-        if inputted_number > 0 and inputted_number <= len(self.contacts): # If the inputted number is valid
-            # Resets the text box
-            self.contacts_output.delete("1.0", END)
-            # Deletes the selected contact
+        try:
+            inputted_number = int(self.contact_num_d.get())
+        except ValueError:
+            print("error")
+
+        if inputted_number > 0 and inputted_number <= len(self.contacts):
             del self.contacts[inputted_number - 1]
-            
-            self.view_all_contacts() # calls the view_all_contacts function to show the deleted contact
-            self.write_contacts() # Rewrites the global list to the csv file, including deleting the contact
-            self.contact_num_d.set("") # resets the entry box
-        else: # if the number is invalid
-            self.message += f"Invalid number entered." # Creates the error message
-            self.contact_num_d.set("") # resets the entry box
-            self.display_message() # Displays the error message
+
+            self.view_all_contacts()
+
+            self.write_contacts()
+
+            self.contact_num_d.set("")
+        else:
+            self.message += f"Invalid number entered."
+            display_message()
         
-    '''Displays the error message in self.message'''
+        
+
     def display_message(self):
         if self.message != "": # If the message isn't an empty string, it will display the error message
             messagebox.showerror("Error:", self.message)
-            self.name_box.focus_force() # focuses the text entry boxes because the error box sometimes cause the entry boxes to freeze
             self.message = "" # Resets the error message back to empty
             
 

@@ -32,7 +32,7 @@ def write_movies(movies):
     try:
         with open(FILENAME, "w", newline="") as file:
             # this line will throw a Blocking IO error to test what would happen if the user encounters this error
-##            raise BlockingIOError("Error raised for testing.")
+            raise BlockingIOError("Error raised for testing.")
             writer = csv.writer(file)
             writer.writerows(movies)
     except OSError as e:
