@@ -26,26 +26,8 @@ class Calculator(ttk.Frame, tk.Text):
         self.parent = parent # sets the parent to the self parent so that this function knows the parent
         self.message = "" # sets the message to an empty string so that we can use it later
 
-        '''Sets up the variables that will work with the gui'''
-        # Variables for dividing
-        self.div_fir = tk.StringVar()
-        self.div_sec = tk.StringVar()
-
-        # Variables for multiplying
-        self.mult_fir = tk.StringVar()
-        self.mult_sec = tk.StringVar()
-
-        # Variables for subtracting
-        self.sub_fir = tk.StringVar()
-        self.sub_sec = tk.StringVar()
-
-        # Variables for adding
-        self.add_fir = tk.StringVar()
-        self.add_sec = tk.StringVar()
-
-        self.expression = ""
+        self.expression = "" # variable that will hold the numbers inputted that we will calculate and output the answer
         
-
         self.initComponents(root) # Runs the initComponents function to set up the grid
 
     '''Display the grid of labels, buttons, and text entry fields'''
@@ -63,68 +45,68 @@ class Calculator(ttk.Frame, tk.Text):
         # Title
         ttk.Label(self, text = "Calculator").grid(column = 0, row = 0, columnspan = 5, pady = 5, sticky = tk.N)
         # Row 2 - Text Box
-        self.number_output = scrolledtext.ScrolledText(textFrame, height = 5, width = 35, state = "normal")
+        self.number_output = scrolledtext.ScrolledText(textFrame, height = 5, width = 30, state = "normal")
         self.number_output.grid(column = 0, row = 0, sticky = tk.W, padx = (17, 0))
 
         # Row 3 - Clear
-        ttk.Button(calcFrame, text = "Clear", command = self.clear_output, width = 7).grid(column = 3, row = 0, pady = 3, padx = 3)
+        ttk.Button(calcFrame, text = "Clear", command = self.clear_output, width = 8).grid(column = 3, row = 0, pady = 3, padx = 3, ipady = 2)
 
         # Row 4 - (1, 2, 3, +)
-        ttk.Button(calcFrame, text = "1", command = lambda: self.press(1), width = 7).grid(column = 0, row = 1, pady = 3, padx = 3)
-        ttk.Button(calcFrame, text = "2", command = lambda: self.press(2), width = 7).grid(column = 1, row = 1, pady = 3, padx = 3)
-        ttk.Button(calcFrame, text = "3", command = lambda: self.press(3), width = 7).grid(column = 2, row = 1, pady = 3, padx = 3)
-        ttk.Button(calcFrame, text = "+", command = lambda: self.press(" + "), width = 7).grid(column = 3, row = 1, pady = 3, padx = 3)
+        ttk.Button(calcFrame, text = "1", command = lambda: self.press(1), width = 8).grid(column = 0, row = 1, ipady = 4) #lambda lets us pass the 1 argument into the self.press function
+        ttk.Button(calcFrame, text = "2", command = lambda: self.press(2), width = 8).grid(column = 1, row = 1, ipady = 4)
+        ttk.Button(calcFrame, text = "3", command = lambda: self.press(3), width = 8).grid(column = 2, row = 1, ipady = 4)
+        ttk.Button(calcFrame, text = "+", command = lambda: self.press(" + "), width = 8).grid(column = 3, row = 1, ipady = 4)
 
         # Row 5 - (4, 5, 6, -)
-        ttk.Button(calcFrame, text = "4", command = lambda: self.press(4), width = 7).grid(column = 0, row = 2, pady = 3, padx = 3)
-        ttk.Button(calcFrame, text = "5", command = lambda: self.press(5), width = 7).grid(column = 1, row = 2, pady = 3, padx = 3)
-        ttk.Button(calcFrame, text = "6", command = lambda: self.press(6), width = 7).grid(column = 2, row = 2, pady = 3, padx = 3)
-        ttk.Button(calcFrame, text = "-", command = lambda: self.press(" - "), width = 7).grid(column = 3, row = 2, pady = 3, padx = 3)
+        ttk.Button(calcFrame, text = "4", command = lambda: self.press(4), width = 8).grid(column = 0, row = 2, ipady = 4)
+        ttk.Button(calcFrame, text = "5", command = lambda: self.press(5), width = 8).grid(column = 1, row = 2, ipady = 4)
+        ttk.Button(calcFrame, text = "6", command = lambda: self.press(6), width = 8).grid(column = 2, row = 2, ipady = 4)
+        ttk.Button(calcFrame, text = "-", command = lambda: self.press(" - "), width = 8).grid(column = 3, row = 2, ipady = 4)
 
         # Row 6 - (7, 8, 9, *)
-        ttk.Button(calcFrame, text = "7", command = lambda: self.press(7), width = 7).grid(column = 0, row = 3, pady = 3, padx = 3)
-        ttk.Button(calcFrame, text = "8", command = lambda: self.press(8), width = 7).grid(column = 1, row = 3, pady = 3, padx = 3)
-        ttk.Button(calcFrame, text = "9", command = lambda: self.press(9), width = 7).grid(column = 2, row = 3, pady = 3, padx = 3)
-        ttk.Button(calcFrame, text = "*", command = lambda: self.press(" * "), width = 7).grid(column = 3, row = 3, pady = 3, padx = 3)
+        ttk.Button(calcFrame, text = "7", command = lambda: self.press(7), width = 8).grid(column = 0, row = 3, ipady = 4)
+        ttk.Button(calcFrame, text = "8", command = lambda: self.press(8), width = 8).grid(column = 1, row = 3, ipady = 4)
+        ttk.Button(calcFrame, text = "9", command = lambda: self.press(9), width = 8).grid(column = 2, row = 3, ipady = 4)
+        ttk.Button(calcFrame, text = "*", command = lambda: self.press(" * "), width = 8).grid(column = 3, row = 3, ipady = 4)
 
         # Row 7 - (0, Clear, =, /)
-        ttk.Button(calcFrame, text = "0", command = lambda: self.press(0), width = 7).grid(column = 0, row = 4, pady = 3, padx = 3)
-        ttk.Button(calcFrame, text = ".", command = lambda: self.press("."), width = 7).grid(column = 1, row = 4, pady = 3, padx = 3)
-        ttk.Button(calcFrame, text = "=", command = self.equals, width = 7).grid(column = 2, row = 4, pady = 3, padx = 3)
-        ttk.Button(calcFrame, text = "/", command = lambda: self.press(" / "), width = 7).grid(column = 3, row = 4, pady = 3, padx = 3)
-        
-        
+        ttk.Button(calcFrame, text = "0", command = lambda: self.press(0), width = 8).grid(column = 0, row = 4, ipady = 4)
+        ttk.Button(calcFrame, text = ".", command = lambda: self.press("."), width = 8).grid(column = 1, row = 4, ipady = 4)
+        ttk.Button(calcFrame, text = "=", command = self.equals, width = 8).grid(column = 2, row = 4, ipady = 4)
+        ttk.Button(calcFrame, text = "/", command = lambda: self.press(" / "), width = 8).grid(column = 3, row = 4, ipady = 4)
                 
         self.pack() # packs the frame so that it can be displayed in the gui
-
-    def clear_output(self):
-        self.expression = ""
-        self.number_output.delete("1.0", END)
-        self.number_output.insert(tk.END, self.expression)
-
-    def press(self, number):
-        self.expression += str(number)
-
-        self.number_output.delete("1.0", END)
-        self.number_output.insert(tk.END, self.expression)
-
-    def equals(self):
-        try:
-            total = str(eval(self.expression))
-
-            if len(self.expression) >= 25:
-                self.number_output.insert(tk.END, f"\n = {total}")
-            else:
-                self.number_output.insert(tk.END, f" = {total}")
-
-            self.expression = ""
-        except:
-            self.message += "Can't Calculate"
-            self.display_message()
-            
-            self.expression = ""
         
 
+    '''Clears the text box output and the stored expression'''
+    def clear_output(self):
+        self.expression = "" # Sets the expression to empty
+        self.number_output.delete("1.0", END) # Clears the text box output
+        self.number_output.insert(tk.END, self.expression) # Prints the empty expression just to make sure they're the same
+
+    '''Puts the pressed button into the expression variable'''
+    def press(self, number):
+        self.expression += str(number) # Adds the inputted number as a string to the expression variable
+
+        self.number_output.delete("1.0", END) # Clears the text box
+        self.number_output.insert(tk.END, self.expression) # outputs the new expression so that the user can see the number they just pressed
+
+    '''Takes the expression variable, calculates it, and outputs the answer'''
+    def equals(self):
+        try: # Tries to evaluate the expression as a string, with a possible can't evaluate error
+            total = str(eval(self.expression))
+
+            if len(self.expression) >= 20: # if the expression has more than 20 characters, it outputs the answer on seperate lines
+                self.number_output.insert(tk.END, f"\n = {total}")
+            else: # if the expression is less than 20 characters, it puts the answer in the same line
+                self.number_output.insert(tk.END, f" = {total}")
+
+            self.expression = "" # resets the expression after it's done calculating
+        except: # If it can't calculate:
+            self.message += "Can't Calculate" # put can't calculate into the error message
+            self.display_message() # outputs the error message
+            
+            self.expression = "" # Resets the expression, since it couldn't calculate it
         
     '''Displays the error message in self.message'''
     def display_message(self):
