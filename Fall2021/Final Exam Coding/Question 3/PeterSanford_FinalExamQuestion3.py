@@ -38,6 +38,7 @@ class Calculator(ttk.Frame, tk.Text):
         textFrame = ttk.Frame(self)
         textFrame.grid(column = 0, row = 1, columnspan = 5, pady = 5)
 
+        # Creates the Frame for the number buttons
         calcFrame = ttk.Frame(self)
         calcFrame.grid(column = 0, row = 3, columnspan = 5, pady = 15)
         
